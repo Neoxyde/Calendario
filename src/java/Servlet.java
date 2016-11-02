@@ -101,7 +101,7 @@ public class Servlet extends HttpServlet
 		    //Add data to the cookie
 		    cookie.setValue(cookie.getValue() + date + "-" + description + "@");
 		    
-		    //
+		    //Send the cookie to the client
 		    response.addCookie(cookie);
 		}
                 
@@ -249,6 +249,10 @@ public class Servlet extends HttpServlet
         return rawData.split("@");
     }
     
+    /**
+     * Prints every date the <code>dates</code> array has in a table.
+     * @param out PrintWriter to print in HTML.
+     */
     private void printDates(PrintWriter out)
     {
 	for (String date : dates)
