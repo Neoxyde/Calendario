@@ -39,6 +39,8 @@ public class Servlet extends HttpServlet
      * Used to tell if the username has been already registered.
      */
     private boolean isRegistered;
+    
+    private String[] dates;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -94,10 +96,8 @@ public class Servlet extends HttpServlet
                 //If the user has any dates
                 if (!cookie.getValue().isEmpty())
                 {
-                    String[] dates = handleCookie(cookie);
-                }
-                
-                
+                    dates = handleCookie(cookie);
+                }                
             }
 
             //Print the main page.
@@ -148,7 +148,7 @@ public class Servlet extends HttpServlet
     private void printMainPage(PrintWriter out, String username)
     {
         out.println("<!DOCTYPE html>\n"
-                + "<html lang=\"en\">\n"
+                + "<html lang=\"es\">\n"
                 + "<head>\n"
                 + "    <meta charset=\"UTF-8\">\n"
                 + "    <title>Calendario</title>\n"
@@ -160,7 +160,29 @@ public class Servlet extends HttpServlet
                 + "        <div id=\"msgwelcome\">Bienvenido, " + username + "</div>\n"
                 + "        <div class=\"dates\" style=\"margin-bottom:2em;\">\n"
                 + "            <h4>Citas</h4>\n"
-                + "            <p>Día Mes Año Descripción</p>\n"
+                + "            <table>\n"
+                + "                 <tr>\n"
+                + "                 <th>Día</th>\n"
+                + "                 <th>Mes</th>\n"
+                + "                 <th>Año</th>\n"
+                + "                 <th>Descripción</th>\n"
+                + "                 </tr>\n");
+        
+        //
+        for (String date : dates)
+        {
+            String[] details = date.split("-");
+            out.println("<tr>\n"
+                + "<td>" + details[0] + "</td>\n"
+                + "<td>" + details[1] + "</td>\n"
+                + "<td>" + details[2] + "</td>\n"
+                + "<td>" + details[3] + "</td>\n"
+                + "</tr>\n");
+        }
+        //TODO output the cookie values into the table
+        
+        out.println("                 \n"
+                + "            </table>\n"
                 + "        </div>\n"
                 + "        <div class=\"newdate\" style=\"margin-top:2em;\">\n"
                 + "            <h4>Crear nueva cita</h4>\n"
@@ -180,6 +202,10 @@ public class Servlet extends HttpServlet
                 + "</html>");
     }
 
+    /**
+     * Gets the specified cookie 
+     * @param request The action Object for 
+     */
     private void getCookie(HttpServletRequest request)
     {
         Cookie[] cookieArray = request.getCookies();
