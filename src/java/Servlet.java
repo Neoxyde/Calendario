@@ -88,10 +88,22 @@ public class Servlet extends HttpServlet
                 isRegistered = true;
             } else
             {
-                //TODO add data handling from cookie
-                
-                //Retrieve the cookie.
+		//Retrieve the cookie.
                 getCookie(request);
+		
+		//Retrieve data from form
+                String date = request.getParameter("date");		
+		String description = request.getParameter("description");
+		
+		//If the date and description were filled
+		if (date != null && description != null)
+		{
+		    //Add data to the cookie
+		    cookie.setValue(cookie.getValue() + date + "-" + description + "@");
+		    
+		    //
+		    response.addCookie(cookie);
+		}
                 
                 //If the user has any dates
                 if (!cookie.getValue().isEmpty())
@@ -168,18 +180,10 @@ public class Servlet extends HttpServlet
                 + "                 <th>Descripción</th>\n"
                 + "                 </tr>\n");
         
-        //
-        for (String date : dates)
-        {
-            String[] details = date.split("-");
-            out.println("<tr>\n"
-                + "<td>" + details[0] + "</td>\n"
-                + "<td>" + details[1] + "</td>\n"
-                + "<td>" + details[2] + "</td>\n"
-                + "<td>" + details[3] + "</td>\n"
-                + "</tr>\n");
-        }
-        //TODO output the cookie values into the table
+        if (dates != null)
+	{
+	    printDates(out);
+	}
         
         out.println("                 \n"
                 + "            </table>\n"
@@ -243,6 +247,20 @@ public class Servlet extends HttpServlet
         
         //Return all the dates
         return rawData.split("@");
+    }
+    
+    private void printDates(PrintWriter out)
+    {
+	for (String date : dates)
+        {
+            String[] details = date.split("-");
+            out.println("<tr>\n"
+                + "<td>" + details[2] + "</td>\n"
+                + "<td>" + details[1] + "</td>\n"
+                + "<td>" + details[0] + "</td>\n"
+                + "<td>" + details[3] + "</td>\n"
+                + "</tr>\n");
+        }
     }
     
 
